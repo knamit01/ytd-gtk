@@ -48,6 +48,8 @@ class youtubedl_gui:
         pass
     
     def download(self, widget):
+        # Disable the download button to prevent the start of a parallel thread
+        self.builder.get_object("btnDownload").set_sensitive(False)
         # TODO: add code to start download 
         # use pipe to call youtube-dl and parse output to show to gui
         utube_cmd = ["youtube-dl", "-t", "-c"]
@@ -72,8 +74,7 @@ class youtubedl_gui:
         if msg != "":
             #check if msg contains "ERROR"
             if msg.count("ERROR"):
-                self.builder.get_object("statusbar").push(self.context_id,msg)
-                self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")
+                self.reset_ui(msg)
                 return False # returns a false to stop polling for youtube-dl output
                 
             elif msg.count("[download]"):
@@ -88,6 +89,10 @@ class youtubedl_gui:
                     dl_time = dl_status[6]
                     self.update_progressbar(dl_percent_complete)
                     self.builder.get_object("lblProgress").set_text("Speed: "+dl_speed+" ETA: "+dl_time)
+                    if dl_percent_complete >= 100.0 :
+                        self.reset_ui("Download complete")
+                elif dl_status[-1]=="downloaded":
+                    self.reset_ui("Download complete")
                 else:
                     self.builder.get_object("statusbar").push(self.context_id,msg)
             else:
@@ -100,12 +105,16 @@ class youtubedl_gui:
     
     def cancel_download(self, widget):
         # TODO: add code to stop downloading
+        self.reset_ui("User Abort")
+        
+    def reset_ui(self,status_msg):
         try:
             self.proc.terminate()
             gobject.source_remove(self.timer)
-            self.builder.get_object("statusbar").push(self.context_id,"User Abort")
+            self.builder.get_object("btnDownload").set_sensitive(True)
+            self.builder.get_object("statusbar").push(self.context_id,status_msg)
             self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")
-            
+            self.builder.get_object("progressbar").set_fraction(0)
         except:
             pass
         
@@ -125,7 +134,6 @@ class youtubedl_gui:
     
     def update_progressbar(self,percent_complete = 0):
         # TODO: add code to update progress bar as per the % complete parameter
-        self.builder.get_object("progressbar").set_text(str(percent_complete)+ " %")
         self.builder.get_object("progressbar").set_fraction(percent_complete/100)
         return 
 
