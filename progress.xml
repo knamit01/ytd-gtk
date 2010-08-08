@@ -1,1 +1,6 @@
-
+<download_progress>
+	<download_task id="">
+		<download_url></download_url>
+		<download_percent_complete></download_percent_complete>
+	</download_task>
+</download_progress>

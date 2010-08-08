@@ -16,7 +16,7 @@ except:
 class youtubedl_gui:
 
     def __init__( self ):
-		
+        
         self.builder = gtk.Builder()
         builder = self.builder
         builder.add_from_file("youtube.xml")
@@ -30,26 +30,26 @@ class youtubedl_gui:
             "btnSave_clicked" : self.save_preference,
             "btnDiscard_clicked" : self.discard_changes,
         }
-		
+        
         builder.connect_signals(dic)
-		# TODO: initialise the interface
-		
-		# TODO: load defaults for preferences
-		
-		# TODO: load the url list from file and create a new download file for youtube-dl
-		
-		# gtk.main()
-		
+        # TODO: initialise the interface
+        
+        # TODO: load defaults for preferences
+        
+        # TODO: load the url list from file and create a new download file for youtube-dl
+        
+        # gtk.main()
+        
     def quit(self,widget):
         sys.exit()        
-	
+    
     def add_url(self, widget):
-		# TODO: add code to add url to list
+        # TODO: add code to add url to list
         pass
-	
+    
     def download(self, widget):
-		# TODO: add code to start download 
-		# use pipe to call youtube-dl and parse output to show to gui
+        # TODO: add code to start download 
+        # use pipe to call youtube-dl and parse output to show to gui
         utube_cmd = ["youtube-dl", "-t", "-c"]
         #get preferences
         location,vformat = self.get_pref()
@@ -82,7 +82,7 @@ class youtubedl_gui:
                 msg = msg[len(msg)-1]
                 dl_status = msg.split()
                 if len(dl_status)>=7 :
-                    dl_percent_complete = dl_status[0]
+                    dl_percent_complete = float(dl_status[0][0:-1])
                     dl_size = dl_status[2]
                     dl_speed = dl_status[4]
                     dl_time = dl_status[6]
@@ -97,9 +97,9 @@ class youtubedl_gui:
                 self.builder.get_object("statusbar").push(self.context_id,msg)
 
         return True # return is true to continue polling for output of youtube-dl
-	
+    
     def cancel_download(self, widget):
-		# TODO: add code to stop downloading
+        # TODO: add code to stop downloading
         try:
             self.proc.terminate()
             gobject.source_remove(self.timer)
@@ -109,27 +109,29 @@ class youtubedl_gui:
         except:
             pass
         
-	
+    
     def default(self, widget):
-		# TODO: add code to restore defaults in the preference tab
+        # TODO: add code to restore defaults in the preference tab
         pass
-	
+    
     def save_preference(self, widget):
-		# TODO: add code to save options in the preference tab
-		# save to file and read it back
+        # TODO: add code to save options in the preference tab
+        # save to file and read it back
         pass
-	
+    
     def discard_changes(self, widget):
-		# TODO: add code to load defaults
+        # TODO: add code to load defaults
         pass
-	
+    
     def update_progressbar(self,percent_complete = 0):
-		# TODO: add code to update progress bar as per the % complete parameter
+        # TODO: add code to update progress bar as per the % complete parameter
+        self.builder.get_object("progressbar").set_text(str(percent_complete)+ " %")
+        self.builder.get_object("progressbar").set_fraction(percent_complete/100)
         return 
 
     def parse_sout(self,message):
-		# TODO: add code to parse sout and return a tuple (gui_affected,value)
-	    pass
+        # TODO: add code to parse sout and return a tuple (gui_affected,value)
+        pass
     
     def get_pref(self):
         # TODO: code to get preferences to be passed to youtube-dl
