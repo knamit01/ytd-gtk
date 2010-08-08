@@ -41,7 +41,7 @@ class youtubedl_gui:
 		# gtk.main()
 		
     def quit(self,widget):
-        sys.exit()
+        sys.exit()        
 	
     def add_url(self, widget):
 		# TODO: add code to add url to list
@@ -50,16 +50,20 @@ class youtubedl_gui:
     def download(self, widget):
 		# TODO: add code to start download 
 		# use pipe to call youtube-dl and parse output to show to gui
-        url = self.builder.get_object("txtUrl").get_text()
+        utube_cmd = ["youtube-dl", "-t", "-c"]
+        #get preferences
         location,vformat = self.get_pref()
         if vformat!="":
-            vformat = " -f "+vformat
+            utube_cmd.append("-f "+vformat)
+        # get url
+        url = self.builder.get_object("txtUrl").get_text()
         if url!="" :
+            utube_cmd.append(url)
             self.file_stdout = open('utube.txt', 'w')
-            self.proc = Popen(["youtube-dl -t -c "+vformat+url],  stdout=self.file_stdout, stderr=STDOUT, shell=True, cwd=location)
+            self.proc = Popen(utube_cmd,  stdout=self.file_stdout, stderr=STDOUT, cwd=location)
             self.file_stdin = open('utube.txt', 'r')
             self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
-            self.timer = gobject.timeout_add(400, self.download_status)
+            self.timer = gobject.timeout_add(1000, self.download_status)
     
     def download_status(self):
         # extracts the messages from the youtube-dl execution and shows on the status bar
@@ -69,6 +73,8 @@ class youtubedl_gui:
             #check if msg contains "ERROR"
             if msg.count("ERROR"):
                 self.builder.get_object("statusbar").push(self.context_id,msg)
+                self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")
+                return False # returns a false to stop polling for youtube-dl output
                 
             elif msg.count("[download]"):
                 # extract %complete, size, speed and estimated_time
@@ -81,7 +87,7 @@ class youtubedl_gui:
                     dl_speed = dl_status[4]
                     dl_time = dl_status[6]
                     self.update_progressbar(dl_percent_complete)
-                    self.builder.get_object("lblProgress").set_text("Speed: "+dl_speed+"ETA: "+dl_time)
+                    self.builder.get_object("lblProgress").set_text("Speed: "+dl_speed+" ETA: "+dl_time)
                 else:
                     self.builder.get_object("statusbar").push(self.context_id,msg)
             else:
@@ -90,14 +96,19 @@ class youtubedl_gui:
                 msg = msg[len(msg)-1]
                 self.builder.get_object("statusbar").push(self.context_id,msg)
 
-        return True
+        return True # return is true to continue polling for output of youtube-dl
 	
     def cancel_download(self, widget):
 		# TODO: add code to stop downloading
         try:
             self.proc.terminate()
+            gobject.source_remove(self.timer)
+            self.builder.get_object("statusbar").push(self.context_id,"User Abort")
+            self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")
+            
         except:
             pass
+        
 	
     def default(self, widget):
 		# TODO: add code to restore defaults in the preference tab
