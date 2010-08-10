@@ -32,7 +32,16 @@ class youtubedl_gui:
         }
         
         builder.connect_signals(dic)
+        
         # TODO: initialise the interface
+        
+        # initialise format combo box
+        vf_list = {"Default" : "",
+                    "best":"-b",
+                    "mobile": "-m",
+                    "hi-def":"--hi-def"}
+                    
+        self.create_cbo_list(builder.get_object("cboFormat"),vf_list)
         
         # TODO: load defaults for preferences
         
@@ -53,19 +62,27 @@ class youtubedl_gui:
         # TODO: add code to start download 
         # use pipe to call youtube-dl and parse output to show to gui
         utube_cmd = ["youtube-dl", "-t", "-c"]
+        
         #get preferences
-        location,vformat = self.get_pref()
+        location = self.builder.get_object("folderDownload").get_current_folder()
+        vformat = self.get_cbo_option(self.builder.get_object("cboFormat"))
         if vformat!="":
-            utube_cmd.append("-f "+vformat)
-        # get url
+            utube_cmd.append(vformat)
+        
+		# get url
         url = self.builder.get_object("txtUrl").get_text()
-        if url!="" :
+        # start download
+        if url.strip()!="" :
             utube_cmd.append(url)
             self.file_stdout = open('utube.txt', 'w')
             self.proc = Popen(utube_cmd,  stdout=self.file_stdout, stderr=STDOUT, cwd=location)
             self.file_stdin = open('utube.txt', 'r')
             self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
             self.timer = gobject.timeout_add(1000, self.download_status)
+        else:
+            # if url is empty skip download and activate download button
+            self.builder.get_object("btnDownload").set_sensitive(True)
+            
     
     def download_status(self):
         # extracts the messages from the youtube-dl execution and shows on the status bar
@@ -145,6 +162,22 @@ class youtubedl_gui:
         # TODO: code to get preferences to be passed to youtube-dl
         # returns a tuple ('download_location','format') by default user directory and no format
         return (os.path.expanduser('~'),"")
+    
+    def create_cbo_list(self,cbo_object,cbo_dic):
+        # Create options for combo box from a dictionary
+        store = gtk.ListStore(str,str)
+        for item in cbo_dic:
+            store.append([item,cbo_dic[item]])        
+        cbo_object.set_model(store)
+        cbo_object.set_active(0)
+        cell = gtk.CellRendererText() 
+        cbo_object.pack_start(cell) 
+        cbo_object.add_attribute(cell, 'text', 0)
+    
+    def get_cbo_option(self,cbo_object):
+        cbo_active = cbo_object.get_active()
+        cbo_value = cbo_object.get_model()[cbo_active][1]
+        return cbo_value
 
 youtubedl_gui()
 gtk.main()

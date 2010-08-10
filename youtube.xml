@@ -202,7 +202,7 @@
                                     </object>
                                 </child>
                                 <child>
-                                    <object class="GtkFileChooserButton" id="file">
+                                    <object class="GtkFileChooserButton" id="folderDownload">
                                         <property name="action">select-folder</property>
                                         <property name="title" translatable="yes">Select A Folder</property>
                                         <property name="visible">True</property>
