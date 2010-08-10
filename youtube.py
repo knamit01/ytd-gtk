@@ -29,6 +29,8 @@ class youtubedl_gui:
             "btnDefault_clicked" : self.default,
             "btnSave_clicked" : self.save_preference,
             "btnDiscard_clicked" : self.discard_changes,
+            "btnDelete_clicked" : self.delete,
+            "btnClear_clicked" : self.clear
         }
         
         builder.connect_signals(dic)
@@ -43,18 +45,23 @@ class youtubedl_gui:
                     
         self.create_cbo_list(builder.get_object("cboFormat"),vf_list)
         
-        # TODO: load defaults for preferences
+        # initialise download directory to home
+        builder.get_object("folderDownload").set_current_folder(os.path.expanduser('~'))
+        
+        # initialise listUrl and enable multiple select
+        builder.get_object("listUrl").get_selection().set_mode(gtk.SELECTION_MULTIPLE)
         
         # TODO: load the url list from file and create a new download file for youtube-dl
-        
-        # gtk.main()
         
     def quit(self,widget):
         sys.exit()        
     
     def add_url(self, widget):
         # TODO: add code to add url to list
-        pass
+        url = self.builder.get_object("txtUrl").get_text()
+        if url.strip()!="":
+            self.builder.get_object("listUrl").get_model().append(["Queued",self.builder.get_object("txtUrl").get_text()])
+        
     
     def download(self, widget):
         # Disable the download button to prevent the start of a parallel thread
@@ -124,6 +131,18 @@ class youtubedl_gui:
         # TODO: add code to stop downloading
         self.reset_ui("User Abort")
         
+    def delete(self,widget):
+        # Delete selected items from listurl
+        listUrl = self.builder.get_object("listUrl")
+        url_model, url_selected = listUrl.get_selection().get_selected_rows()
+        iters = [url_model.get_iter(url) for url in url_selected]
+        for iter in iters:
+            url_model.remove(iter)
+        
+    def clear(self,widget):
+        # Clear listUrl
+        self.builder.get_object("listUrl").get_model().clear()
+    
     def reset_ui(self,status_msg):
         try:
             self.proc.terminate()
@@ -154,15 +173,6 @@ class youtubedl_gui:
         self.builder.get_object("progressbar").set_fraction(percent_complete/100)
         return 
 
-    def parse_sout(self,message):
-        # TODO: add code to parse sout and return a tuple (gui_affected,value)
-        pass
-    
-    def get_pref(self):
-        # TODO: code to get preferences to be passed to youtube-dl
-        # returns a tuple ('download_location','format') by default user directory and no format
-        return (os.path.expanduser('~'),"")
-    
     def create_cbo_list(self,cbo_object,cbo_dic):
         # Create options for combo box from a dictionary
         store = gtk.ListStore(str,str)

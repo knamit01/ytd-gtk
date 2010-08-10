@@ -67,15 +67,17 @@
                         </child>
                         <child>
                             <object class="GtkHBox" id="hbox2">
+                                <property name="border_width">10</property>
                                 <property name="visible">True</property>
                                 <child>
-                                    <object class="GtkTreeView" id="treeview1">
+                                    <object class="GtkTreeView" id="listUrl">
+                                        <property name="is_focus">True</property>
                                         <property name="model">model1</property>
                                         <property name="search_column">0</property>
                                         <property name="visible">True</property>
                                         <child>
                                             <object class="GtkTreeViewColumn" id="treeviewcolumn1">
-                                                <property name="title" translatable="yes">Delete</property>
+                                                <property name="title" translatable="yes">Status</property>
                                                 <child>
                                                     <object class="GtkCellRendererText" id="treeviewcolumn1-renderer1"/>
                                                     <attributes>
@@ -97,7 +99,60 @@
                                         </child>
                                     </object>
                                     <packing>
-                                        <property name="padding">20</property>
+                                        <property name="padding">10</property>
+                                    </packing>
+                                </child>
+                                <child>
+                                    <object class="GtkVBox" id="vbox3">
+                                        <property name="visible">True</property>
+                                        <child>
+                                            <object class="GtkLabel" id="label1">
+                                                <property name="visible">True</property>
+                                                <property name="xalign">0.0</property>
+                                            </object>
+                                        </child>
+                                        <child>
+                                            <object class="GtkButton" id="btnDelete">
+                                                <property name="is_focus">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="btnDelete_clicked" name="clicked"/>
+                                                <child>
+                                                    <object class="GtkImage" id="image2">
+                                                        <property name="stock">gtk-delete</property>
+                                                        <property name="visible">True</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                            <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkButton" id="btnClear">
+                                                <property name="is_focus">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="btnClear_clicked" name="clicked"/>
+                                                <child>
+                                                    <object class="GtkImage" id="image3">
+                                                        <property name="stock">gtk-clear</property>
+                                                        <property name="visible">True</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                            <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">2</property>
+                                            </packing>
+                                        </child>
+                                    </object>
+                                    <packing>
+                                        <property name="expand">False</property>
+                                        <property name="fill">False</property>
+                                        <property name="padding">10</property>
+                                        <property name="position">1</property>
                                     </packing>
                                 </child>
                             </object>
@@ -107,7 +162,7 @@
                         </child>
                         <child>
                             <object class="GtkHBox" id="hbox3">
-                                <property name="border_width">10</property>
+                                <property name="border_width">18</property>
                                 <property name="spacing">5</property>
                                 <property name="visible">True</property>
                                 <child>
@@ -160,7 +215,6 @@
                             </object>
                             <packing>
                                 <property name="expand">False</property>
-                                <property name="padding">10</property>
                                 <property name="position">2</property>
                             </packing>
                         </child>
