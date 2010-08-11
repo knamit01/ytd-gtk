@@ -103,7 +103,7 @@
                                     </packing>
                                 </child>
                                 <child>
-                                    <object class="GtkVBox" id="vbox3">
+                                    <object class="GtkVBox" id="vboxList">
                                         <property name="visible">True</property>
                                         <child>
                                             <object class="GtkLabel" id="label1">
@@ -112,13 +112,13 @@
                                             </object>
                                         </child>
                                         <child>
-                                            <object class="GtkButton" id="btnDelete">
+                                            <object class="GtkButton" id="btnReload">
                                                 <property name="is_focus">True</property>
                                                 <property name="visible">True</property>
-                                                <signal handler="btnDelete_clicked" name="clicked"/>
+                                                <signal handler="btnReload_clicked" name="clicked"/>
                                                 <child>
                                                     <object class="GtkImage" id="image2">
-                                                        <property name="stock">gtk-delete</property>
+                                                        <property name="stock">gtk-refresh</property>
                                                         <property name="visible">True</property>
                                                     </object>
                                                 </child>
@@ -127,6 +127,24 @@
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
                                                 <property name="position">1</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkButton" id="btnDelete">
+                                                <property name="is_focus">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="btnDelete_clicked" name="clicked"/>
+                                                <child>
+                                                    <object class="GtkImage" id="imgReload">
+                                                        <property name="stock">gtk-delete</property>
+                                                        <property name="visible">True</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                            <packing>
+                                                <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">2</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -144,7 +162,7 @@
                                             <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
-                                                <property name="position">2</property>
+                                                <property name="position">3</property>
                                             </packing>
                                         </child>
                                     </object>

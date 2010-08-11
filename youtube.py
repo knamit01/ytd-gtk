@@ -30,12 +30,14 @@ class youtubedl_gui:
             "btnSave_clicked" : self.save_preference,
             "btnDiscard_clicked" : self.discard_changes,
             "btnDelete_clicked" : self.delete,
+            "btnReload_clicked" : self.reload,
             "btnClear_clicked" : self.clear
         }
         
         builder.connect_signals(dic)
         
         # TODO: initialise the interface
+        self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
         
         # initialise format combo box
         vf_list = {"Default" : "",
@@ -66,6 +68,7 @@ class youtubedl_gui:
     def download(self, widget):
         # Disable the download button to prevent the start of a parallel thread
         self.builder.get_object("btnDownload").set_sensitive(False)
+        self.builder.get_object("vboxList").set_sensitive(False)
         # TODO: add code to start download 
         # use pipe to call youtube-dl and parse output to show to gui
         utube_cmd = ["youtube-dl", "-t", "-c"]
@@ -77,18 +80,19 @@ class youtubedl_gui:
             utube_cmd.append(vformat)
         
 		# get url
-        url = self.builder.get_object("txtUrl").get_text()
+        self.current_url = self.get_next_queued() # get current_url[status,url] field
         # start download
-        if url.strip()!="" :
-            utube_cmd.append(url)
+        if self.current_url :
+            utube_cmd.append(self.current_url[1]) # get url from current_url
             self.file_stdout = open('utube.txt', 'w')
             self.proc = Popen(utube_cmd,  stdout=self.file_stdout, stderr=STDOUT, cwd=location)
             self.file_stdin = open('utube.txt', 'r')
-            self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
+            self.current_url[0] = "Processing"
             self.timer = gobject.timeout_add(1000, self.download_status)
         else:
             # if url is empty skip download and activate download button
             self.builder.get_object("btnDownload").set_sensitive(True)
+            self.builder.get_object("vboxList").set_sensitive(True)
             
     
     def download_status(self):
@@ -98,8 +102,8 @@ class youtubedl_gui:
         if msg != "":
             #check if msg contains "ERROR"
             if msg.count("ERROR"):
-                self.reset_ui(msg)
-                return False # returns a false to stop polling for youtube-dl output
+                self.reset_ui("ERROR", msg)
+                self.download(None)
                 
             elif msg.count("[download]"):
                 # extract %complete, size, speed and estimated_time
@@ -114,9 +118,11 @@ class youtubedl_gui:
                     self.update_progressbar(dl_percent_complete)
                     self.builder.get_object("lblProgress").set_text("Speed: "+dl_speed+" ETA: "+dl_time)
                     if dl_percent_complete >= 100.0 :
-                        self.reset_ui("Download complete")
+                        self.reset_ui("Done","Download complete")
+                        self.download(None)
                 elif dl_status[-1]=="downloaded":
-                    self.reset_ui("Download complete")
+                    self.reset_ui("Done","Download complete")
+                    self.download(None)
                 else:
                     self.builder.get_object("statusbar").push(self.context_id,msg)
             else:
@@ -129,12 +135,16 @@ class youtubedl_gui:
     
     def cancel_download(self, widget):
         # TODO: add code to stop downloading
-        self.reset_ui("User Abort")
+        self.reset_ui("Queued","User Abort")
         
+    def reload(self,widget):
+        url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()
+        for url in url_selected:
+            url_model[url][0] = "Queued"
+    
     def delete(self,widget):
         # Delete selected items from listurl
-        listUrl = self.builder.get_object("listUrl")
-        url_model, url_selected = listUrl.get_selection().get_selected_rows()
+        url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()
         iters = [url_model.get_iter(url) for url in url_selected]
         for iter in iters:
             url_model.remove(iter)
@@ -143,11 +153,14 @@ class youtubedl_gui:
         # Clear listUrl
         self.builder.get_object("listUrl").get_model().clear()
     
-    def reset_ui(self,status_msg):
+    def reset_ui(self,url_status,status_msg):
         try:
             self.proc.terminate()
             gobject.source_remove(self.timer)
+            if self.current_url:
+                self.current_url[0] = url_status
             self.builder.get_object("btnDownload").set_sensitive(True)
+            self.builder.get_object("vboxList").set_sensitive(True)
             self.builder.get_object("statusbar").push(self.context_id,status_msg)
             self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")
             self.builder.get_object("progressbar").set_fraction(0)
@@ -188,6 +201,14 @@ class youtubedl_gui:
         cbo_active = cbo_object.get_active()
         cbo_value = cbo_object.get_model()[cbo_active][1]
         return cbo_value
+        
+    def get_next_queued(self):
+        url_model = self.builder.get_object("listUrl").get_model()
+        for row in url_model:
+            if row[0] == 'Queued':
+                return row
+                break
+        return None
 
 youtubedl_gui()
 gtk.main()
