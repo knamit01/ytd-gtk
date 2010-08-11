@@ -26,9 +26,7 @@ class youtubedl_gui:
             "btnAdd_clicked" : self.add_url,
             "btnCancel_clicked" : self.cancel_download,
             "btnDownload_clicked" : self.download,
-            "btnDefault_clicked" : self.default,
             "btnSave_clicked" : self.save_preference,
-            "btnDiscard_clicked" : self.discard_changes,
             "btnDelete_clicked" : self.delete,
             "btnReload_clicked" : self.reload,
             "btnClear_clicked" : self.clear
@@ -168,17 +166,9 @@ class youtubedl_gui:
             pass
         
     
-    def default(self, widget):
-        # TODO: add code to restore defaults in the preference tab
-        pass
-    
     def save_preference(self, widget):
         # TODO: add code to save options in the preference tab
         # save to file and read it back
-        pass
-    
-    def discard_changes(self, widget):
-        # TODO: add code to load defaults
         pass
     
     def update_progressbar(self,percent_complete = 0):

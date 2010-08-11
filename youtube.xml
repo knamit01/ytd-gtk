@@ -331,33 +331,14 @@
                         <child>
                             <object class="GtkHButtonBox" id="hbuttonbox1">
                                 <property name="border_width">10</property>
+                                <property name="layout_style">end</property>
                                 <property name="visible">True</property>
-                                <child>
-                                    <object class="GtkButton" id="btnDefault">
-                                        <property name="label" translatable="yes">Load Defaults</property>
-                                        <property name="visible">True</property>
-                                        <signal handler="btnDefault_clicked" name="clicked"/>
-                                    </object>
-                                </child>
-                                <child>
-                                    <object class="GtkButton" id="btnDiscard">
-                                        <property name="label" translatable="yes">Discard</property>
-                                        <property name="visible">True</property>
-                                        <signal handler="btnDiscard_clicked" name="clicked"/>
-                                    </object>
-                                    <packing>
-                                        <property name="position">1</property>
-                                    </packing>
-                                </child>
                                 <child>
                                     <object class="GtkButton" id="btnSave">
                                         <property name="label" translatable="yes">Save</property>
                                         <property name="visible">True</property>
                                         <signal handler="btnSave_clicked" name="clicked"/>
                                     </object>
-                                    <packing>
-                                        <property name="position">2</property>
-                                    </packing>
                                 </child>
                             </object>
                             <packing>
