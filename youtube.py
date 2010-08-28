@@ -1,11 +1,7 @@
 #youtube-dl frontend
 import sys, os.path, gobject
 from subprocess import *
-try:  
-    import pygtk  
-    pygtk.require("2.0")  
-except:  
-    pass  
+
 try:  
     import gtk  
 except:  
@@ -61,6 +57,7 @@ class youtubedl_gui:
         url = self.builder.get_object("txtUrl").get_text()
         if url.strip()!="":
             self.builder.get_object("listUrl").get_model().append(["Queued",self.builder.get_object("txtUrl").get_text()])
+            self.builder.get_object("txtUrl").set_text("")
         
     
     def download(self, widget):
