@@ -35,10 +35,17 @@ class youtubedl_gui:
         self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
         
         # initialise format combo box
-        vf_list = {"Default" : "",
-                    "best":"-b",
-                    "mobile": "-m",
-                    "hi-def":"--hi-def"}
+        vf_list = { "Default" : "",
+                    "Best"    : "-b",
+                    "Mobile"  : "-m",
+                    "Hi-def"  : "--hi-def",
+                    "flv 240p": "--format=5",
+                    "flv 360p": "--format=34",
+                    "flv 480p": "--format=35",
+                    "mp4 360p": "--format=18",
+                    "mp4 720p": "--format=22",
+
+                  }
                     
         self.create_cbo_list(builder.get_object("cboFormat"),vf_list)
         
@@ -177,10 +184,12 @@ class youtubedl_gui:
     def create_cbo_list(self,cbo_object,cbo_dic):
         # Create options for combo box from a dictionary
         store = gtk.ListStore(str,str)
-        for item in cbo_dic:
+        cbo_dic_keys = cbo_dic.keys() 
+        cbo_dic_keys.sort()
+        for item in cbo_dic_keys:
             store.append([item,cbo_dic[item]])        
         cbo_object.set_model(store)
-        cbo_object.set_active(0)
+        cbo_object.set_active(1)
         cell = gtk.CellRendererText() 
         cbo_object.pack_start(cell) 
         cbo_object.add_attribute(cell, 'text', 0)
