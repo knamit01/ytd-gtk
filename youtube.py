@@ -1,3 +1,4 @@
+#!/usr/bin/env python
 #youtube-dl frontend
 import sys, os.path, gobject
 from subprocess import *
