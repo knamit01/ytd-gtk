@@ -60,7 +60,7 @@ class youtubedl_gui:
         self.url_file = local_appdir + "urllist"
         if not os.path.exists(local_appdir):
             os.makedirs(local_appdir)
-        if os.path.exists(self.url_file):
+        if os.path.isfile(self.url_file):
             urlfile = open(self.url_file,"r")
             for urls in urlfile:
                 try:
