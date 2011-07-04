@@ -56,6 +56,27 @@ class youtubedl_gui:
         builder.get_object("listUrl").get_selection().set_mode(gtk.SELECTION_MULTIPLE)
         
         # TODO: load the url list from file and create a new download file for youtube-dl
+        local_appdir = os.path.expanduser('~') + "/.ytd-gtk/"
+        self.url_file = local_appdir + "urllist"
+        if not os.path.exists(local_appdir):
+            os.makedirs(local_appdir)
+        if os.path.exists(self.url_file):
+            urlfile = open(self.url_file,"r")
+            for urls in urlfile:
+                try:
+                    status, url = urls.strip('\n').split(',')
+                    self.builder.get_object("listUrl").get_model().append([status,url])
+                except:
+                    pass
+        
+        # end of init module
+        
+    def saveurllist(self):
+        urlfile = open(self.url_file,"w")
+        urls = self.builder.get_object("listUrl").get_model()
+        for row in urls:
+            urlfile.write("%s,%s\n"%(row[0],row[1]))
+        urlfile.close()
         
     def quit(self,widget):
         sys.exit()        
@@ -66,7 +87,7 @@ class youtubedl_gui:
         if url.strip()!="":
             self.builder.get_object("listUrl").get_model().append(["Queued",self.builder.get_object("txtUrl").get_text()])
             self.builder.get_object("txtUrl").set_text("")
-        
+        self.saveurllist()
     
     def download(self, widget):
         # Disable the download button to prevent the start of a parallel thread
@@ -144,6 +165,7 @@ class youtubedl_gui:
         url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()
         for url in url_selected:
             url_model[url][0] = "Queued"
+        self.saveurllist()
     
     def delete(self,widget):
         # Delete selected items from listurl
@@ -151,10 +173,12 @@ class youtubedl_gui:
         iters = [url_model.get_iter(url) for url in url_selected]
         for iter in iters:
             url_model.remove(iter)
+        self.saveurllist()
         
     def clear(self,widget):
         # Clear listUrl
         self.builder.get_object("listUrl").get_model().clear()
+        self.saveurllist()
     
     def reset_ui(self,url_status,status_msg):
         try:
@@ -167,6 +191,7 @@ class youtubedl_gui:
             self.builder.get_object("statusbar").push(self.context_id,status_msg)
             self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")
             self.builder.get_object("progressbar").set_fraction(0)
+            self.saveurllist()
         except:
             pass
         
