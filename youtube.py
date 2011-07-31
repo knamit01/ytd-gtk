@@ -2,6 +2,7 @@
 #youtube-dl frontend
 import sys, os.path, gobject
 from subprocess import *
+from xml.dom.minidom import Document
 
 try:  
     import gtk  
@@ -199,7 +200,18 @@ class youtubedl_gui:
     def save_preference(self, widget):
         # TODO: add code to save options in the preference tab
         # save to file and read it back
-        pass
+
+		# Save preferences to text file
+		line = self.builder.get_object("folderDownload").get_current_folder()+"|"+self.get_cbo_option(self.builder.get_object("cboFormat"))
+		f = open(os.path.expanduser('~') + "/.ytd-gtk/prefs", 'w')
+		f.write(line)
+		f.close()
+		
+		# Read preferences from text file
+		f = open(os.path.expanduser('~') + "/.ytd-gtk/prefs", 'r')
+		vals = f.readline().strip().split('|')
+		f.close()
+		print vals
     
     def update_progressbar(self,percent_complete = 0):
         # TODO: add code to update progress bar as per the % complete parameter
