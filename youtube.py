@@ -2,7 +2,11 @@
 #youtube-dl frontend
 import sys, os.path, gobject
 from subprocess import *
-from xml.dom.minidom import Document
+
+try:
+    os.chdir('/'.join(sys.argv[0].split('/')[0:-1]))
+except:
+    pass
 
 try:  
     import gtk  
@@ -56,11 +60,14 @@ class youtubedl_gui:
         # initialise listUrl and enable multiple select
         builder.get_object("listUrl").get_selection().set_mode(gtk.SELECTION_MULTIPLE)
         
+        # set local appdir to save pref and url list
+        self.local_appdir = os.path.expanduser('~') + "/.ytd-gtk/"
+        # if local appdir does not exist create it
+        if not os.path.exists(self.local_appdir):
+            os.makedirs(self.local_appdir)
+
         # TODO: load the url list from file and create a new download file for youtube-dl
-        local_appdir = os.path.expanduser('~') + "/.ytd-gtk/"
-        self.url_file = local_appdir + "urllist"
-        if not os.path.exists(local_appdir):
-            os.makedirs(local_appdir)
+        self.url_file = self.local_appdir + "urllist"
         if os.path.isfile(self.url_file):
             urlfile = open(self.url_file,"r")
             for urls in urlfile:
@@ -69,9 +76,20 @@ class youtubedl_gui:
                     self.builder.get_object("listUrl").get_model().append([status,url])
                 except:
                     pass
+            urlfile.close()
         
+        # Read preferences from text file
+        self.pref_file = self.local_appdir + "prefs"
+        if os.path.isfile(self.pref_file):
+            preffile = open(self.pref_file, 'r')
+            prefs = preffile.readline().strip().split('|')
+            self.builder.get_object("folderDownload").set_current_folder(prefs[0])
+            self.builder.get_object("cboFormat").set_active(int(prefs[1]))
+            preffile.close()
+            
         # end of init module
         
+
     def saveurllist(self):
         urlfile = open(self.url_file,"w")
         urls = self.builder.get_object("listUrl").get_model()
@@ -187,32 +205,24 @@ class youtubedl_gui:
             gobject.source_remove(self.timer)
             if self.current_url:
                 self.current_url[0] = url_status
+                self.saveurllist()
             self.builder.get_object("btnDownload").set_sensitive(True)
             self.builder.get_object("vboxList").set_sensitive(True)
             self.builder.get_object("statusbar").push(self.context_id,status_msg)
             self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")
             self.builder.get_object("progressbar").set_fraction(0)
-            self.saveurllist()
         except:
             pass
         
     
     def save_preference(self, widget):
         # TODO: add code to save options in the preference tab
-        # save to file and read it back
 
-		# Save preferences to text file
-		line = self.builder.get_object("folderDownload").get_current_folder()+"|"+self.get_cbo_option(self.builder.get_object("cboFormat"))
-		f = open(os.path.expanduser('~') + "/.ytd-gtk/prefs", 'w')
-		f.write(line)
-		f.close()
+        line = self.builder.get_object("folderDownload").get_current_folder()+"|"+ str(self.builder.get_object("cboFormat").get_active())
+        preffile = open(self.pref_file, 'w')
+        preffile.write(line)
+        preffile.close()
 		
-		# Read preferences from text file
-		f = open(os.path.expanduser('~') + "/.ytd-gtk/prefs", 'r')
-		vals = f.readline().strip().split('|')
-		f.close()
-		print vals
-    
     def update_progressbar(self,percent_complete = 0):
         # TODO: add code to update progress bar as per the % complete parameter
         self.builder.get_object("progressbar").set_fraction(percent_complete/100)
