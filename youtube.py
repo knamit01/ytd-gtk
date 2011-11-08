@@ -41,15 +41,13 @@ class youtubedl_gui:
         
         # initialise format combo box
         vf_list = { "Default" : "",
-                    "Best"    : "-b",
-                    "Mobile"  : "-m",
-                    "Hi-def"  : "--hi-def",
+                    "Mobile"  : "--format=17",
+                    "Hi-def"  : "--format=35",
                     "flv 240p": "--format=5",
                     "flv 360p": "--format=34",
                     "flv 480p": "--format=35",
                     "mp4 360p": "--format=18",
                     "mp4 720p": "--format=22",
-
                   }
                     
         self.create_cbo_list(builder.get_object("cboFormat"),vf_list)
