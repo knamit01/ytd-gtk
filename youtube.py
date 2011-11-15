@@ -24,19 +24,21 @@ class youtubedl_gui:
         builder.add_from_file("youtube.xml")
         
         dic = { 
-            "window_destroy" : self.quit,
-            "btnAdd_clicked" : self.add_url,
+            "window_destroy"    : self.quit,
+            "wsevent"           : self.wsevent,
+            "btnAdd_clicked"    : self.add_url,
             "btnCancel_clicked" : self.cancel_download,
             "btnDownload_clicked" : self.download,
-            "btnSave_clicked" : self.save_preference,
+            "btnSave_clicked"   : self.save_preference,
             "btnDelete_clicked" : self.delete,
             "btnReload_clicked" : self.reload,
-            "btnClear_clicked" : self.clear
+            "btnClear_clicked"  : self.clear
         }
         
         builder.connect_signals(dic)
         
         # TODO: initialise the interface
+        self.winmain = self.builder.get_object("windowMain")
         self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
         
         # initialise format combo box
@@ -51,6 +53,11 @@ class youtubedl_gui:
                   }
                     
         self.create_cbo_list(builder.get_object("cboFormat"),vf_list)
+        
+        # create and connect status icon  to click event      
+        self.statusicon = gtk.status_icon_new_from_stock(gtk.STOCK_GO_DOWN)
+        self.statusicon.connect('activate', self.status_clicked)
+        self.statusicon.set_tooltip("Youtube Downloader")
         
         # initialise download directory to home
         builder.get_object("folderDownload").set_current_folder(os.path.expanduser('~'))
@@ -251,6 +258,18 @@ class youtubedl_gui:
                 return row
                 break
         return None
+    
+    def status_clicked(self,status):
+        # on clicking the status icon show window and set default tab to downloads
+        self.winmain.deiconify()
+        self.winmain.show_all()
+        self.builder.get_object("notebook").set_current_page(0)
+    
+    def wsevent(self,widget,event):
+        # on minimise hide window
+        if (event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED):
+            self.winmain.hide_all()
+        return True
 
 youtubedl_gui()
 gtk.main()
