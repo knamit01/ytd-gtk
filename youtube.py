@@ -77,8 +77,8 @@ class youtubedl_gui:
             urlfile = open(self.url_file,"r")
             for urls in urlfile:
                 try:
-                    status, url = urls.strip('\n').split(',')
-                    self.builder.get_object("listUrl").get_model().append([status,url])
+                    status, url, msg = urls.strip('\n').split(',')
+                    self.builder.get_object("listUrl").get_model().append([status,url,msg])
                 except:
                     pass
             urlfile.close()
@@ -99,7 +99,7 @@ class youtubedl_gui:
         urlfile = open(self.url_file,"w")
         urls = self.builder.get_object("listUrl").get_model()
         for row in urls:
-            urlfile.write("%s,%s\n"%(row[0],row[1]))
+            urlfile.write("%s,%s,%s\n"%(row[0],row[1],row[2]))
         urlfile.close()
         
     def quit(self,widget):
@@ -109,7 +109,7 @@ class youtubedl_gui:
         # TODO: add code to add url to list
         url = self.builder.get_object("txtUrl").get_text()
         if url.strip()!="":
-            self.builder.get_object("listUrl").get_model().append(["Queued",self.builder.get_object("txtUrl").get_text()])
+            self.builder.get_object("listUrl").get_model().append(["Queued",self.builder.get_object("txtUrl").get_text(),''])
             self.builder.get_object("txtUrl").set_text("")
         self.saveurllist()
     
@@ -129,6 +129,7 @@ class youtubedl_gui:
         
 		# get url
         self.current_url = self.get_next_queued() # get current_url[status,url] field
+        self.current_filename = '' #init current file name to ''
         # start download
         if self.current_url :
             utube_cmd.append(self.current_url[1]) # get url from current_url
@@ -166,11 +167,13 @@ class youtubedl_gui:
                     self.update_progressbar(dl_percent_complete)
                     self.builder.get_object("lblProgress").set_text("Speed: "+dl_speed+" ETA: "+dl_time)
                     if dl_percent_complete >= 100.0 :
-                        self.reset_ui("Done","Download complete")
+                        self.reset_ui("Done","Download complete "+self.current_filename)
                         self.download(None)
                 elif dl_status[-1]=="downloaded":
-                    self.reset_ui("Done","Download complete")
+                    self.reset_ui("Done","Download complete "+self.current_filename)
                     self.download(None)
+                elif self.current_filename=='' and dl_status[-2]=="Destination:":
+                    self.current_filename = dl_status[-1]
                 else:
                     self.builder.get_object("statusbar").push(self.context_id,msg)
             else:
@@ -210,6 +213,7 @@ class youtubedl_gui:
             gobject.source_remove(self.timer)
             if self.current_url:
                 self.current_url[0] = url_status
+                self.current_url[2] = status_msg
                 self.saveurllist()
             self.builder.get_object("btnDownload").set_sensitive(True)
             self.builder.get_object("vboxList").set_sensitive(True)
