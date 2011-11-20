@@ -127,16 +127,25 @@ class youtubedl_gui:
         if vformat!="":
             utube_cmd.append(vformat)
         
+        uname = self.builder.get_object("txtUname").get_text().strip()
+        passwd = self.builder.get_object("txtPass").get_text().strip()
+        
+        # if username/pwd not empty 
+        if (uname!='' and passwd!=''):
+            utube_cmd.append('-u') ; utube_cmd.append(uname)
+            utube_cmd.append('-p') ; utube_cmd.append(passwd)
+        
 		# get url
         self.current_url = self.get_next_queued() # get current_url[status,url] field
         self.current_filename = '' #init current file name to ''
+        
         # start download
         if self.current_url :
             utube_cmd.append(self.current_url[1]) # get url from current_url
             self.file_stdout = open('utube.txt', 'w')
             self.proc = Popen(utube_cmd,  stdout=self.file_stdout, stderr=STDOUT, cwd=location)
             self.file_stdin = open('utube.txt', 'r')
-            self.current_url[0] = "Processing"
+            self.current_url[0] = "Processing" ; self.current_url[2] = "In progress"
             self.timer = gobject.timeout_add(1000, self.download_status)
         else:
             # if url is empty skip download and activate download button
@@ -265,14 +274,23 @@ class youtubedl_gui:
     
     def status_clicked(self,status):
         # on clicking the status icon show window and set default tab to downloads
-        self.winmain.deiconify()
-        self.winmain.show_all()
-        self.builder.get_object("notebook").set_current_page(0)
+        if self.mini:
+            self.winmain.deiconify()
+            self.winmain.show_all()
+            self.builder.get_object("notebook").set_current_page(0)
+        else:
+            self.winmain.iconify()
     
     def wsevent(self,widget,event):
-        # on minimise hide window
-        if (event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED):
+        # track state - if minimised or not
+        if (event.new_window_state==0):
+            self.mini = False
+        # if a normal window is minimised or a maximised window is minimized 
+        # hide window and minimise to tray
+        if (event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED | gtk.gdk.WINDOW_STATE_MAXIMIZED
+            or event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED):
             self.winmain.hide_all()
+            self.mini = True 
         return True
 
 youtubedl_gui()
