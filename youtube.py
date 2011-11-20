@@ -29,11 +29,7 @@ class youtubedl_gui:
             "btnAdd_clicked"    : self.add_url,
             "btnCancel_clicked" : self.cancel_download,
             "btnDownload_clicked" : self.download,
-#<<<<<<< local
-           # "btnSave_clicked" : self.save_preference,
-#=======
             "btnSave_clicked"   : self.save_preference,
-#>>>>>>> other
             "btnDelete_clicked" : self.delete,
             "btnReload_clicked" : self.reload,
             "btnClear_clicked"  : self.clear
@@ -235,46 +231,16 @@ class youtubedl_gui:
             self.builder.get_object("progressbar").set_fraction(0)
         except:
             pass
-#<<<<<<< local
-            
-	#def read_preference(self, widget):
-		#try:
-			 #Read preferences from text file
-			#f = open(os.path.expanduser('~') + "/.ytd-gtk/prefs", 'r')
-			#vals = f.readline().strip().split('|')
-			#f.close()
-			#print vals
-		#except:
-			 #Return default values
-			#pass
-#=======
         
     
     def save_preference(self, widget):
         # TODO: add code to save options in the preference tab
-#>>>>>>> other
 
-#<<<<<<< local
-	def save_preference(self, widget):
-        ## TODO: add code to save options in the preference tab
-        ## save to file
-		#try:
-			## Save preferences to text file
-			#line = self.builder.get_object("folderDownload").get_current_folder()+"|"+self.get_cbo_option(self.builder.get_object("cboFormat"))
-			#f = open(os.path.expanduser('~') + "/.ytd-gtk/prefs", 'w')
-			#f.write(line)
-			#f.close()
-			#self.read_preference()
-		#except:
-		pass
-			
-#=======
         line = self.builder.get_object("folderDownload").get_current_folder()+"|"+ str(self.builder.get_object("cboFormat").get_active())
         preffile = open(self.pref_file, 'w')
         preffile.write(line)
         preffile.close()
 		
-#>>>>>>> other
     def update_progressbar(self,percent_complete = 0):
         # TODO: add code to update progress bar as per the % complete parameter
         self.builder.get_object("progressbar").set_fraction(percent_complete/100)
