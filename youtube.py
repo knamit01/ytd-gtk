@@ -55,7 +55,7 @@ class youtubedl_gui:
         self.create_cbo_list(builder.get_object("cboFormat"),vf_list)
         
         # create and connect status icon  to click event      
-        self.statusicon = gtk.status_icon_new_from_stock(gtk.STOCK_GO_DOWN)
+        self.statusicon = gtk.status_icon_new_from_file('ytdicon.png')
         self.statusicon.connect('activate', self.status_clicked)
         self.statusicon.set_tooltip("Youtube Downloader")
         

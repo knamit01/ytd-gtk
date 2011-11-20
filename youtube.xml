@@ -12,6 +12,7 @@
         <property name="default_width">600</property>
         <property name="mnemonics_visible">False</property>
         <property name="title" translatable="yes">youtube downloader</property>
+        <property name="icon">ytdicon.png</property>
         <property name="visible">True</property>
         <signal handler="window_destroy" name="destroy"/>
         <signal handler="wsevent" name="window-state-event"/>
