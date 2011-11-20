@@ -1,0 +1,5 @@
+[youtube] Setting language
+[youtube] vTJEalVj_1E: Downloading video webpage
+[youtube] vTJEalVj_1E: Downloading video info webpage
+[youtube] vTJEalVj_1E: Extracting video information
+ERROR: no fmt_url_map or conn information found in video info
