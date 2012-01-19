@@ -275,11 +275,14 @@ class youtubedl_gui:
     def status_clicked(self,status):
         # on clicking the status icon show window and set default tab to downloads
         if self.mini:
-            self.winmain.deiconify()
+            #self.winmain.deiconify()
             self.winmain.show_all()
             self.builder.get_object("notebook").set_current_page(0)
+            self.mini = False
         else:
-            self.winmain.iconify()
+            self.winmain.hide_all()
+            self.mini = True
+            #self.winmain.iconify()
     
     def wsevent(self,widget,event):
         # track state - if minimised or not
