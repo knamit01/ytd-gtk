@@ -290,10 +290,10 @@ class youtubedl_gui:
             self.mini = False
         # if a normal window is minimised or a maximised window is minimized 
         # hide window and minimise to tray
-        if (event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED | gtk.gdk.WINDOW_STATE_MAXIMIZED
-            or event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED):
-            self.winmain.hide_all()
-            self.mini = True 
+        #if (event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED | gtk.gdk.WINDOW_STATE_MAXIMIZED
+            #or event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED):
+            #self.winmain.hide_all()
+            #self.mini = True 
         return True
 
 youtubedl_gui()
