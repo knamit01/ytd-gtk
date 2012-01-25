@@ -69,15 +69,20 @@ class youtubedl_gui:
         self.statusicon.connect('activate', self.status_clicked)
         self.statusicon.set_tooltip("Youtube Downloader")
         
-        #initialize drop window and connect to accept dropped urls
+        ###initialize drop window and connect to accept dropped urls###
         self.w = gtk.Window()
-        self.w.set_size_request(50, 50)
-        #self.w.set_decorated(False)
+        drop_image = gtk.Image()
+        drop_image.set_from_file('ytdicon.png')
+        self.w.add(drop_image)
+        self.w.set_size_request(40, 40)
+        self.w.set_decorated(False)
         self.w.set_keep_above(True)
+        self.w.stick()
         self.w.drag_dest_set(0, [], 0)
         self.w.connect('drag_motion', self.motion_cb)
         self.w.connect('drag_drop', self.drop_cb)
         self.w.connect('drag_data_received', self.got_data_cb)
+        self.w.connect('event',self.wevent)
         
         # initialise download directory to home
         builder.get_object("folderDownload").set_current_folder(os.path.expanduser('~'))
@@ -341,6 +346,11 @@ class youtubedl_gui:
             except: pass
             self.w.show_all()
 
-        
+       
+    def wevent(self,widget,event):
+        if event.type == gtk.gdk.LEAVE_NOTIFY and event.mode == gtk.gdk.CROSSING_UNGRAB:
+            x,y = self.w.get_position()
+            self.w.move(int(event.x)+x-20,int(event.y)+y-20)
+   
 youtubedl_gui()
 gtk.main()
