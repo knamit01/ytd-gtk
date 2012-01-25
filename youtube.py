@@ -19,6 +19,8 @@ class youtubedl_gui:
 
     def __init__( self ):
         
+        
+        
         self.builder = gtk.Builder()
         builder = self.builder
         builder.add_from_file("youtube.xml")
@@ -32,7 +34,8 @@ class youtubedl_gui:
             "btnSave_clicked"   : self.save_preference,
             "btnDelete_clicked" : self.delete,
             "btnReload_clicked" : self.reload,
-            "btnClear_clicked"  : self.clear
+            "btnClear_clicked"  : self.clear,
+            "btnDrop_clicked"   : self.btnDrop_clicked
         }
         
         builder.connect_signals(dic)
@@ -41,6 +44,13 @@ class youtubedl_gui:
         self.winmain = self.builder.get_object("windowMain")
         self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
         
+        
+        # accept url drag drop on the main window
+        self.winmain.drag_dest_set(0, [], 0)
+        self.winmain.connect('drag_motion', self.motion_cb)
+        self.winmain.connect('drag_drop', self.drop_cb)
+        self.winmain.connect('drag_data_received', self.got_data_cb)
+
         # initialise format combo box
         vf_list = { "Default" : "",
                     "Mobile"  : "--format=17",
@@ -58,6 +68,16 @@ class youtubedl_gui:
         self.statusicon = gtk.status_icon_new_from_file('ytdicon.png')
         self.statusicon.connect('activate', self.status_clicked)
         self.statusicon.set_tooltip("Youtube Downloader")
+        
+        #initialize drop window and connect to accept dropped urls
+        self.w = gtk.Window()
+        self.w.set_size_request(50, 50)
+        #self.w.set_decorated(False)
+        self.w.set_keep_above(True)
+        self.w.drag_dest_set(0, [], 0)
+        self.w.connect('drag_motion', self.motion_cb)
+        self.w.connect('drag_drop', self.drop_cb)
+        self.w.connect('drag_data_received', self.got_data_cb)
         
         # initialise download directory to home
         builder.get_object("folderDownload").set_current_folder(os.path.expanduser('~'))
@@ -295,6 +315,32 @@ class youtubedl_gui:
             #self.winmain.hide_all()
             #self.mini = True 
         return True
+        
+    def motion_cb(self,widget, context, x, y, time):
+        context.drag_status(gtk.gdk.ACTION_COPY, time)
+        # Returning True which means "I accept this data".
+        return True
 
+    def drop_cb(self,widget, context, x, y, time):
+        # Some data was dropped, get the data
+        widget.drag_get_data(context, context.targets[-1], time)
+        return True
+
+    def got_data_cb(self,widget, context, x, y, data, info, time):
+        # Got data.
+        self.builder.get_object("listUrl").get_model().append(["Queued",data.get_text(),''])
+        self.saveurllist()
+        context.finish(True, False, time)
+        
+    def btnDrop_clicked(self,widget):
+        if self.w.get_property('visible'):
+            self.pos = self.w.get_position()
+            self.w.hide_all()
+        else:
+            try: self.w.move(self.pos[0],self.pos[1])
+            except: pass
+            self.w.show_all()
+
+        
 youtubedl_gui()
 gtk.main()
