@@ -126,12 +126,6 @@
                                     <object class="GtkVBox" id="vboxList">
                                         <property name="visible">True</property>
                                         <child>
-                                            <object class="GtkLabel" id="label1">
-                                                <property name="visible">True</property>
-                                                <property name="xalign">0.0</property>
-                                            </object>
-                                        </child>
-                                        <child>
                                             <object class="GtkButton" id="btnReload">
                                                 <property name="is_focus">True</property>
                                                 <property name="visible">True</property>
@@ -146,7 +140,6 @@
                                             <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
-                                                <property name="position">1</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -164,7 +157,7 @@
                                             <packing>
                                                 <property name="expand">False</property>
                                                 <property name="fill">False</property>
-                                                <property name="position">2</property>
+                                                <property name="position">1</property>
                                             </packing>
                                         </child>
                                         <child>
@@ -181,6 +174,23 @@
                                             </object>
                                             <packing>
                                                 <property name="expand">False</property>
+                                                <property name="fill">False</property>
+                                                <property name="position">2</property>
+                                            </packing>
+                                        </child>
+                                        <child>
+                                            <object class="GtkButton" id="btnDrop">
+                                                <property name="is_focus">True</property>
+                                                <property name="visible">True</property>
+                                                <signal handler="btnDrop_clicked" name="clicked"/>
+                                                <child>
+                                                    <object class="GtkImage" id="image5">
+                                                        <property name="stock">gtk-jump-to</property>
+                                                        <property name="visible">True</property>
+                                                    </object>
+                                                </child>
+                                            </object>
+                                            <packing>
                                                 <property name="fill">False</property>
                                                 <property name="position">3</property>
                                             </packing>
