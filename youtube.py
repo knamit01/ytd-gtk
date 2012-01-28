@@ -333,7 +333,9 @@ class youtubedl_gui:
 
     def got_data_cb(self,widget, context, x, y, data, info, time):
         # Got data.
-        self.builder.get_object("listUrl").get_model().append(["Queued",data.get_text(),''])
+        url = data.get_text().strip()
+        if url!= "":
+            self.builder.get_object("listUrl").get_model().append(["Queued",url,''])
         self.saveurllist()
         context.finish(True, False, time)
         
@@ -348,9 +350,14 @@ class youtubedl_gui:
 
        
     def wevent(self,widget,event):
-        if event.type == gtk.gdk.LEAVE_NOTIFY and event.mode == gtk.gdk.CROSSING_UNGRAB:
+        if event.type == gtk.gdk.DELETE:
+            self.btnDrop_clicked(widget)
+            return True
+        elif event.type == gtk.gdk.LEAVE_NOTIFY and event.mode == gtk.gdk.CROSSING_UNGRAB:
             x,y = self.w.get_position()
             self.w.move(int(event.x)+x-20,int(event.y)+y-20)
-   
-youtubedl_gui()
-gtk.main()
+        
+
+if __name__ =='__main__':   
+    youtubedl_gui()
+    gtk.main()
