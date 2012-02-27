@@ -177,7 +177,9 @@ class youtubedl_gui:
         else:
             # if url is empty skip download and activate download button
             self.builder.get_object("btnDownload").set_sensitive(True)
-            self.builder.get_object("vboxList").set_sensitive(True)
+            self.builder.get_object("btnReload").set_sensitive(True)
+            self.builder.get_object("btnDelete").set_sensitive(True)
+            self.builder.get_object("btnClear").set_sensitive(True)
             
     
     def download_status(self):
