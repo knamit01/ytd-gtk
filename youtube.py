@@ -26,8 +26,6 @@ class youtubedl_gui:
         builder.add_from_file("youtube.xml")
         
         dic = { 
-            "window_destroy"    : self.quit,
-            "wsevent"           : self.wsevent,
             "btnAdd_clicked"    : self.add_url,
             "btnCancel_clicked" : self.cancel_download,
             "btnDownload_clicked" : self.download,
@@ -35,7 +33,8 @@ class youtubedl_gui:
             "btnDelete_clicked" : self.delete,
             "btnReload_clicked" : self.reload,
             "btnClear_clicked"  : self.clear,
-            "btnDrop_clicked"   : self.btnDrop_clicked
+            "btnDrop_clicked"   : self.btnDrop_clicked,
+            "quit"              : self.quit
         }
         
         builder.connect_signals(dic)
@@ -43,7 +42,8 @@ class youtubedl_gui:
         # TODO: initialise the interface
         self.winmain = self.builder.get_object("windowMain")
         self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
-        
+        self.mini = False
+        self.winmain.connect('event',self.wsevt)
         
         # accept url drag drop on the main window
         self.winmain.drag_dest_set(0, [], 0)
@@ -300,27 +300,19 @@ class youtubedl_gui:
     def status_clicked(self,status):
         # on clicking the status icon show window and set default tab to downloads
         if self.mini:
-            #self.winmain.deiconify()
             self.winmain.show_all()
             self.builder.get_object("notebook").set_current_page(0)
             self.mini = False
         else:
             self.winmain.hide_all()
-            self.mini = True
-            #self.winmain.iconify()
+            self.mini=True
     
-    def wsevent(self,widget,event):
-        # track state - if minimised or not
-        if (event.new_window_state==0):
-            self.mini = False
-        # if a normal window is minimised or a maximised window is minimized 
-        # hide window and minimise to tray
-        #if (event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED | gtk.gdk.WINDOW_STATE_MAXIMIZED
-            #or event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED):
-            #self.winmain.hide_all()
-            #self.mini = True 
-        return True
-        
+    def wsevt(self,widget,event):
+        if event.type == gtk.gdk.DELETE:
+            self.winmain.hide_all()
+            self.mini=True
+            return True
+    
     def motion_cb(self,widget, context, x, y, time):
         context.drag_status(gtk.gdk.ACTION_COPY, time)
         # Returning True which means "I accept this data".
@@ -356,7 +348,6 @@ class youtubedl_gui:
         elif event.type == gtk.gdk.LEAVE_NOTIFY and event.mode == gtk.gdk.CROSSING_UNGRAB:
             x,y = self.w.get_position()
             self.w.move(int(event.x)+x-20,int(event.y)+y-20)
-        
 
 if __name__ =='__main__':   
     youtubedl_gui()
