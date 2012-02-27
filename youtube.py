@@ -141,7 +141,9 @@ class youtubedl_gui:
     def download(self, widget):
         # Disable the download button to prevent the start of a parallel thread
         self.builder.get_object("btnDownload").set_sensitive(False)
-        self.builder.get_object("vboxList").set_sensitive(False)
+        self.builder.get_object("btnReload").set_sensitive(False)
+        self.builder.get_object("btnDelete").set_sensitive(False)
+        self.builder.get_object("btnClear").set_sensitive(False)
         # TODO: add code to start download 
         # use pipe to call youtube-dl and parse output to show to gui
         utube_cmd = ["youtube-dl", "-t", "-c"]
@@ -250,7 +252,9 @@ class youtubedl_gui:
                 self.current_url[2] = status_msg
                 self.saveurllist()
             self.builder.get_object("btnDownload").set_sensitive(True)
-            self.builder.get_object("vboxList").set_sensitive(True)
+            self.builder.get_object("btnReload").set_sensitive(True)
+            self.builder.get_object("btnDelete").set_sensitive(True)
+            self.builder.get_object("btnClear").set_sensitive(True)
             self.builder.get_object("statusbar").push(self.context_id,status_msg)
             self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")
             self.builder.get_object("progressbar").set_fraction(0)
