@@ -2,6 +2,7 @@
 #youtube-dl frontend
 import sys, os.path, gobject
 from subprocess import *
+from tempfile import gettempdir
 
 try:
     os.chdir('/'.join(sys.argv[0].split('/')[0:-1]))
@@ -163,9 +164,9 @@ class youtubedl_gui:
         # start download
         if self.current_url :
             utube_cmd.append(self.current_url[1]) # get url from current_url
-            self.file_stdout = open('utube.txt', 'w')
+            self.file_stdout = open(gettempdir()+'/utube.txt', 'w')
             self.proc = Popen(utube_cmd,  stdout=self.file_stdout, stderr=STDOUT, cwd=location)
-            self.file_stdin = open('utube.txt', 'r')
+            self.file_stdin = open(gettempdir()+'/utube.txt', 'r')
             self.current_url[0] = "Processing" ; self.current_url[2] = "In progress"
             self.timer = gobject.timeout_add(1000, self.download_status)
         else:
