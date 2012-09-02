@@ -33,6 +33,8 @@ class youtubedl_gui:
             "btnDelete_clicked" : self.delete,
             "btnReload_clicked" : self.reload,
             "btnClear_clicked"  : self.clear,
+            "btnUp_clicked"     : self.promote,
+            "btnDown_clicked"   : self.demote,
             "btnDrop_clicked"   : self.btnDrop_clicked,
             "quit"              : self.quit
         }
@@ -45,12 +47,6 @@ class youtubedl_gui:
         self.mini = False
         self.winmain.connect('event',self.wsevt)
         
-        # accept url drag drop on the main window
-        self.winmain.drag_dest_set(0, [], 0)
-        self.winmain.connect('drag_motion', self.motion_cb)
-        self.winmain.connect('drag_drop', self.drop_cb)
-        self.winmain.connect('drag_data_received', self.got_data_cb)
-
         # initialise format combo box
         vf_list = { "Default" : "",
                     "Mobile"  : "--format=17",
@@ -141,8 +137,6 @@ class youtubedl_gui:
     def download(self, widget):
         # Disable the download button to prevent the start of a parallel thread
         self.builder.get_object("btnDownload").set_sensitive(False)
-        self.builder.get_object("btnReload").set_sensitive(False)
-        self.builder.get_object("btnDelete").set_sensitive(False)
         self.builder.get_object("btnClear").set_sensitive(False)
         # TODO: add code to start download 
         # use pipe to call youtube-dl and parse output to show to gui
@@ -177,8 +171,6 @@ class youtubedl_gui:
         else:
             # if url is empty skip download and activate download button
             self.builder.get_object("btnDownload").set_sensitive(True)
-            self.builder.get_object("btnReload").set_sensitive(True)
-            self.builder.get_object("btnDelete").set_sensitive(True)
             self.builder.get_object("btnClear").set_sensitive(True)
             
     
@@ -229,7 +221,8 @@ class youtubedl_gui:
     def reload(self,widget):
         url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()
         for url in url_selected:
-            url_model[url][0] = "Queued"
+            if url_model[url][0]!="Processing":
+                url_model[url][0] = "Queued"
         self.saveurllist()
     
     def delete(self,widget):
@@ -237,12 +230,37 @@ class youtubedl_gui:
         url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()
         iters = [url_model.get_iter(url) for url in url_selected]
         for iter in iters:
-            url_model.remove(iter)
+            if url_model[iter][0]!="Processing":
+                url_model.remove(iter)
         self.saveurllist()
         
     def clear(self,widget):
         # Clear listUrl
         self.builder.get_object("listUrl").get_model().clear()
+        self.saveurllist()
+    
+    def promote(self,widget):
+        #promote queued download
+        url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()
+
+        for url in url_selected:
+            if url[0]<=0 : break
+            iter = url_model.get_iter(url)
+            iter_prev = url_model.get_iter(url[0]-1)
+            url_model.move_before(iter,iter_prev)
+        
+        self.saveurllist()
+    
+    def demote(self,widget):
+        #demote queued download
+        url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()
+
+        for url in url_selected[::-1]:
+            iter = url_model.get_iter(url)
+            iter_next = url_model.iter_next(iter)
+            if iter_next == None: break
+            url_model.move_after(iter,iter_next)
+        
         self.saveurllist()
     
     def reset_ui(self,url_status,status_msg):
@@ -254,8 +272,6 @@ class youtubedl_gui:
                 self.current_url[2] = status_msg
                 self.saveurllist()
             self.builder.get_object("btnDownload").set_sensitive(True)
-            self.builder.get_object("btnReload").set_sensitive(True)
-            self.builder.get_object("btnDelete").set_sensitive(True)
             self.builder.get_object("btnClear").set_sensitive(True)
             self.builder.get_object("statusbar").push(self.context_id,status_msg)
             self.builder.get_object("lblProgress").set_text("Speed: --  ETA: --")

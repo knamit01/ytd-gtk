@@ -197,13 +197,13 @@
                                                     </packing>
                                                 </child>
                                                 <child>
-                                                    <object class="GtkButton" id="btnClear">
+                                                    <object class="GtkButton" id="btnUp">
                                                         <property name="is_focus">True</property>
                                                         <property name="visible">True</property>
-                                                        <signal handler="btnClear_clicked" name="clicked"/>
+                                                        <signal handler="btnUp_clicked" name="clicked"/>
                                                         <child>
-                                                            <object class="GtkImage" id="image3">
-                                                                <property name="stock">gtk-clear</property>
+                                                            <object class="GtkImage" id="imageUp">
+                                                                <property name="stock">gtk-go-up</property>
                                                                 <property name="visible">True</property>
                                                             </object>
                                                         </child>
@@ -215,13 +215,13 @@
                                                     </packing>
                                                 </child>
                                                 <child>
-                                                    <object class="GtkButton" id="btnDrop">
+                                                    <object class="GtkButton" id="btnDown">
                                                         <property name="is_focus">True</property>
                                                         <property name="visible">True</property>
-                                                        <signal handler="btnDrop_clicked" name="clicked"/>
+                                                        <signal handler="btnDown_clicked" name="clicked"/>
                                                         <child>
-                                                            <object class="GtkImage" id="image5">
-                                                                <property name="stock">gtk-jump-to</property>
+                                                            <object class="GtkImage" id="imageDown">
+                                                                <property name="stock">gtk-go-down</property>
                                                                 <property name="visible">True</property>
                                                             </object>
                                                         </child>
@@ -229,6 +229,38 @@
                                                     <packing>
                                                         <property name="fill">False</property>
                                                         <property name="position">3</property>
+                                                    </packing>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkButton" id="btnClear">
+                                                        <property name="is_focus">True</property>
+                                                        <property name="visible">True</property>
+                                                        <signal handler="btnClear_clicked" name="clicked"/>
+                                                        <child>
+                                                            <object class="GtkImage" id="imageClear">
+                                                                <property name="stock">gtk-clear</property>
+                                                                <property name="visible">True</property>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                    <packing>
+                                                        <property name="position">4</property>
+                                                    </packing>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkButton" id="btnDrop">
+                                                        <property name="is_focus">True</property>
+                                                        <property name="visible">True</property>
+                                                        <signal handler="btnDrop_clicked" name="clicked"/>
+                                                        <child>
+                                                            <object class="GtkImage" id="imageDrop">
+                                                                <property name="stock">gtk-jump-to</property>
+                                                                <property name="visible">True</property>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                    <packing>
+                                                        <property name="position">5</property>
                                                     </packing>
                                                 </child>
                                             </object>
