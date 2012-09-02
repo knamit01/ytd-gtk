@@ -75,9 +75,9 @@ class youtubedl_gui:
         self.w.set_decorated(False)
         self.w.set_keep_above(True)
         self.w.stick()
-        self.w.drag_dest_set(0, [], 0)
-        self.w.connect('drag_motion', self.motion_cb)
-        self.w.connect('drag_drop', self.drop_cb)
+        self.w.drag_dest_set(gtk.DEST_DEFAULT_ALL, 
+            [('text/plain', 0, 0),('TEXT', 0, 1)],
+            gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
         self.w.connect('drag_data_received', self.got_data_cb)
         self.w.connect('event',self.wevent)
         
@@ -336,16 +336,6 @@ class youtubedl_gui:
             self.mini=True
             return True
     
-    def motion_cb(self,widget, context, x, y, time):
-        context.drag_status(gtk.gdk.ACTION_COPY, time)
-        # Returning True which means "I accept this data".
-        return True
-
-    def drop_cb(self,widget, context, x, y, time):
-        # Some data was dropped, get the data
-        widget.drag_get_data(context, context.targets[-1], time)
-        return True
-
     def got_data_cb(self,widget, context, x, y, data, info, time):
         # Got data.
         url = data.get_text().strip()
@@ -353,6 +343,7 @@ class youtubedl_gui:
             self.builder.get_object("listUrl").get_model().append(["Queued",url,''])
         self.saveurllist()
         context.finish(True, False, time)
+        return True
         
     def btnDrop_clicked(self,widget):
         if self.w.get_property('visible'):
