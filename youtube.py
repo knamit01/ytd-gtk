@@ -68,9 +68,11 @@ class youtubedl_gui:
         
         ###initialize drop window and connect to accept dropped urls###
         self.w = gtk.Window()
+        self.box = gtk.EventBox ()
+        self.w.add (self.box)
         drop_image = gtk.Image()
         drop_image.set_from_file('ytdicon.png')
-        self.w.add(drop_image)
+        self.box.add(drop_image)
         self.w.set_size_request(40, 40)
         self.w.set_decorated(False)
         self.w.set_keep_above(True)
@@ -79,7 +81,8 @@ class youtubedl_gui:
             [('text/plain', 0, 0),('TEXT', 0, 1)],
             gtk.gdk.ACTION_DEFAULT|gtk.gdk.ACTION_COPY)
         self.w.connect('drag_data_received', self.got_data_cb)
-        self.w.connect('event',self.wevent)
+        self.w.connect('delete_event',self.close_drop)
+        self.box.connect('button_press_event',self.drag_window)
         
         # initialise download directory to home
         builder.get_object("folderDownload").set_current_folder(os.path.expanduser('~'))
@@ -353,15 +356,14 @@ class youtubedl_gui:
             try: self.w.move(self.pos[0],self.pos[1])
             except: pass
             self.w.show_all()
-
        
-    def wevent(self,widget,event):
-        if event.type == gtk.gdk.DELETE:
-            self.btnDrop_clicked(widget)
-            return True
-        elif event.type == gtk.gdk.LEAVE_NOTIFY and event.mode == gtk.gdk.CROSSING_UNGRAB:
-            x,y = self.w.get_position()
-            self.w.move(int(event.x)+x-20,int(event.y)+y-20)
+    def close_drop(self,widget,event):
+        self.btnDrop_clicked(widget)
+        return True
+    
+    def drag_window(self,widget,event):
+        self.w.begin_move_drag(event.button, int(event.x_root), int(event.y_root), event.time);
+        return True
 
 if __name__ =='__main__':   
     youtubedl_gui()
