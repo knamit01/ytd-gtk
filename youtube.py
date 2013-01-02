@@ -21,7 +21,6 @@ class youtubedl_gui:
     def __init__( self ):
         
         
-        
         self.builder = gtk.Builder()
         builder = self.builder
         builder.add_from_file("youtube.xml")
@@ -37,6 +36,7 @@ class youtubedl_gui:
             "btnUp_clicked"     : self.promote,
             "btnDown_clicked"   : self.demote,
             "btnDrop_clicked"   : self.btnDrop_clicked,
+            "update"            : self.update,
             "quit"              : self.quit
         }
         
@@ -115,8 +115,22 @@ class youtubedl_gui:
             prefs = preffile.readline().strip().split('|')
             self.builder.get_object("folderDownload").set_current_folder(prefs[0])
             self.builder.get_object("cboFormat").set_active(int(prefs[1]))
+            self.builder.get_object("txtProxy").set_text(prefs[2])
+            self.builder.get_object("txtProxyUser").set_text(prefs[3])
+            self.builder.get_object("txtProxyPass").set_text(prefs[4])
             preffile.close()
             
+        # Set proxy environment
+        prox_addr = self.builder.get_object("txtProxy").get_text().strip()
+        prox_user = self.builder.get_object("txtProxyUser").get_text().strip()
+        prox_pass = self.builder.get_object("txtProxyPass").get_text().strip()
+        
+        if prox_addr!="" :
+            if prox_user!="":
+                os.putenv('http_proxy','http://%s:%s@%s'%(prox_user,prox_pass,prox_addr))
+            else:
+                os.putenv('http_proxy','http://%s'%(prox_addr))
+        
         # end of init module
         
 
@@ -139,6 +153,7 @@ class youtubedl_gui:
         self.saveurllist()
     
     def download(self, widget):
+        
         # Disable the download button to prevent the start of a parallel thread
         self.builder.get_object("btnDownload").set_sensitive(False)
         self.builder.get_object("btnClear").set_sensitive(False)
@@ -287,11 +302,17 @@ class youtubedl_gui:
     def save_preference(self, widget):
         # TODO: add code to save options in the preference tab
 
-        line = self.builder.get_object("folderDownload").get_current_folder()+"|"+ str(self.builder.get_object("cboFormat").get_active())
+        line = self.builder.get_object("folderDownload").get_current_folder()+"|"+ str(self.builder.get_object("cboFormat").get_active())+"|"+ \
+                self.builder.get_object("txtProxy").get_text().strip()+"|"+self.builder.get_object("txtProxyUser").get_text().strip()+"|" + \
+                self.builder.get_object("txtProxyPass").get_text().strip()
         preffile = open(self.pref_file, 'w')
         preffile.write(line)
         preffile.close()
-		
+    
+    def update(self,widget):
+        # Update youtube-dl engine
+        pass
+        
     def update_progressbar(self,percent_complete = 0):
         # TODO: add code to update progress bar as per the % complete parameter
         self.builder.get_object("progressbar").set_fraction(percent_complete/100)
