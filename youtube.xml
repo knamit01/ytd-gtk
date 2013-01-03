@@ -19,14 +19,6 @@
                     </object>
                 </child>
                 <child>
-                    <object class="GtkAction" id="update">
-                        <property name="name">update</property>
-                        <property name="label" translatable="yes">Update dl-engine</property>
-                        <property name="stock_id">gtk-up</property>
-                        <signal handler="update" name="activate"/>
-                    </object>
-                </child>
-                <child>
                     <object class="GtkAction" id="file">
                         <property name="name">file</property>
                         <property name="label" translatable="yes">File</property>
@@ -37,7 +29,6 @@
         <ui>
             <menubar action="menubar" name="menubar">
                 <menu action="file" name="file">
-                    <menuitem action="update" name="update"/>
                     <menuitem action="exit" name="exit"/>
                 </menu>
             </menubar>

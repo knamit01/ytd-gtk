@@ -36,7 +36,6 @@ class youtubedl_gui:
             "btnUp_clicked"     : self.promote,
             "btnDown_clicked"   : self.demote,
             "btnDrop_clicked"   : self.btnDrop_clicked,
-            "update"            : self.update,
             "quit"              : self.quit
         }
         
@@ -309,9 +308,6 @@ class youtubedl_gui:
         preffile.write(line)
         preffile.close()
     
-    def update(self,widget):
-        # Update youtube-dl engine
-        pass
         
     def update_progressbar(self,percent_complete = 0):
         # TODO: add code to update progress bar as per the % complete parameter
