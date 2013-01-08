@@ -207,7 +207,7 @@ class youtubedl_gui:
                 msg = msg.split('[download]')
                 msg = msg[len(msg)-1]
                 dl_status = msg.split()
-                if len(dl_status)>=7 :
+                if len(dl_status)==7 :
                     dl_percent_complete = float(dl_status[0][0:-1])
                     dl_size = dl_status[2]
                     dl_speed = dl_status[4]
