@@ -207,14 +207,14 @@ class youtubedl_gui:
                 msg = msg.split('[download]')
                 msg = msg[len(msg)-1]
                 dl_status = msg.split()
-                if len(dl_status)==7 :
+                if len(dl_status)==7 and dl_status[-2]=='ETA' :
                     dl_percent_complete = float(dl_status[0][0:-1])
                     dl_size = dl_status[2]
                     dl_speed = dl_status[4]
                     dl_time = dl_status[6]
                     self.update_progressbar(dl_percent_complete)
                     self.builder.get_object("lblProgress").set_text("Speed: "+dl_speed+" ETA: "+dl_time)
-                    if dl_percent_complete >= 100.0 :
+                    if dl_percent_complete >= 100.0 and self.proc.poll()!=None:
                         self.reset_ui("Done","Download complete "+self.current_filename)
                         self.download(None)
                 elif dl_status[-1]=="downloaded":
@@ -283,7 +283,8 @@ class youtubedl_gui:
     
     def reset_ui(self,url_status,status_msg):
         try:
-            self.proc.terminate()
+            if self.proc.poll()==None:
+                self.proc.terminate()
             gobject.source_remove(self.timer)
             if self.current_url:
                 self.current_url[0] = url_status
