@@ -44,6 +44,7 @@ class youtubedl_gui:
         # TODO: initialise the interface
         self.winmain = self.builder.get_object("windowMain")
         self.context_id = self.builder.get_object("statusbar").get_context_id('download status')
+        self.builder.get_object("statusbar").push(self.context_id,'Please regularly update youtube-dl engine by running "youtube-dl --update" in terminal')
         self.mini = False
         self.winmain.connect('event',self.wsevt)
         
