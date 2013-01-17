@@ -68,6 +68,7 @@ class youtubedl_gui:
         
         ###initialize drop window and connect to accept dropped urls###
         self.w = gtk.Window()
+        self.w.set_skip_taskbar_hint(True)
         self.box = gtk.EventBox ()
         self.w.add (self.box)
         drop_image = gtk.Image()
