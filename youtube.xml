@@ -75,7 +75,10 @@
                                         </child>
                                         <child>
                                             <object class="GtkEntry" id="txtUrl">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="is_focus">True</property>
+                                                <property name="tooltip_markup" translatable="yes">Enter / Paste or Drop URL in the text box to be added to the list</property>
+                                                <property name="tooltip_text" translatable="yes">Enter / Paste or Drop URL in the text box to be added to the list</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -84,6 +87,10 @@
                                         </child>
                                         <child>
                                             <object class="GtkButton" id="btnAdd">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="is_focus">True</property>
+                                                <property name="tooltip_markup" translatable="yes">Add URL in the Textbox to the List</property>
+                                                <property name="tooltip_text" translatable="yes">Add URL in the Textbox to the List</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="btnAdd_clicked" name="clicked"/>
                                                 <child>
@@ -114,9 +121,12 @@
                                                 <property name="visible">True</property>
                                                 <child>
                                                     <object class="GtkTreeView" id="listUrl">
+                                                        <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
                                                         <property name="model">model1</property>
                                                         <property name="search_column">0</property>
+                                                        <property name="tooltip_markup" translatable="yes">List of added urls - use ctrl/shift keys with mouse based selection to select multiple entries</property>
+                                                        <property name="tooltip_text" translatable="yes">List of added urls - use ctrl/shift keys with mouse based selection to select multiple entries</property>
                                                         <property name="visible">True</property>
                                                         <child>
                                                             <object class="GtkTreeViewColumn" id="treeviewcolumn1">
@@ -163,7 +173,10 @@
                                                 <property name="visible">True</property>
                                                 <child>
                                                     <object class="GtkButton" id="btnReload">
+                                                        <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
+                                                        <property name="tooltip_markup" translatable="yes">Re-queue selected downloads after an Error or User Abort</property>
+                                                        <property name="tooltip_text" translatable="yes">Re-queue selected downloads after an Error or User Abort</property>
                                                         <property name="visible">True</property>
                                                         <signal handler="btnReload_clicked" name="clicked"/>
                                                         <child>
@@ -180,7 +193,10 @@
                                                 </child>
                                                 <child>
                                                     <object class="GtkButton" id="btnDelete">
+                                                        <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
+                                                        <property name="tooltip_markup" translatable="yes">Delete selected downloads</property>
+                                                        <property name="tooltip_text" translatable="yes">Delete selected downloads</property>
                                                         <property name="visible">True</property>
                                                         <signal handler="btnDelete_clicked" name="clicked"/>
                                                         <child>
@@ -198,7 +214,10 @@
                                                 </child>
                                                 <child>
                                                     <object class="GtkButton" id="btnUp">
+                                                        <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
+                                                        <property name="tooltip_markup" translatable="yes">Move selected downloads up in the queue</property>
+                                                        <property name="tooltip_text" translatable="yes">Move selected downloads up in the queue</property>
                                                         <property name="visible">True</property>
                                                         <signal handler="btnUp_clicked" name="clicked"/>
                                                         <child>
@@ -216,7 +235,10 @@
                                                 </child>
                                                 <child>
                                                     <object class="GtkButton" id="btnDown">
+                                                        <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
+                                                        <property name="tooltip_markup" translatable="yes">Move selected downloads down in the queue</property>
+                                                        <property name="tooltip_text" translatable="yes">Move selected downloads down in the queue</property>
                                                         <property name="visible">True</property>
                                                         <signal handler="btnDown_clicked" name="clicked"/>
                                                         <child>
@@ -233,7 +255,10 @@
                                                 </child>
                                                 <child>
                                                     <object class="GtkButton" id="btnClear">
+                                                        <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
+                                                        <property name="tooltip_markup" translatable="yes">Clear all downloads in the list</property>
+                                                        <property name="tooltip_text" translatable="yes">Clear all downloads in the list</property>
                                                         <property name="visible">True</property>
                                                         <signal handler="btnClear_clicked" name="clicked"/>
                                                         <child>
@@ -249,7 +274,10 @@
                                                 </child>
                                                 <child>
                                                     <object class="GtkButton" id="btnDrop">
+                                                        <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
+                                                        <property name="tooltip_markup" translatable="yes">Show/Hide link drop box</property>
+                                                        <property name="tooltip_text" translatable="yes">Show/Hide link drop box</property>
                                                         <property name="visible">True</property>
                                                         <signal handler="btnDrop_clicked" name="clicked"/>
                                                         <child>
@@ -299,7 +327,10 @@
                                         </child>
                                         <child>
                                             <object class="GtkButton" id="btnCancel">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="is_focus">True</property>
+                                                <property name="tooltip_markup" translatable="yes">Abort Downloading - can be resumed later</property>
+                                                <property name="tooltip_text" translatable="yes">Abort Downloading - can be resumed later</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="btnCancel_clicked" name="clicked"/>
                                                 <child>
@@ -315,6 +346,9 @@
                                         </child>
                                         <child>
                                             <object class="GtkButton" id="btnDownload">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="tooltip_markup" translatable="yes">Start Downloading</property>
+                                                <property name="tooltip_text" translatable="yes">Start Downloading</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="btnDownload_clicked" name="clicked"/>
                                                 <child>
@@ -377,7 +411,10 @@
                                         <child>
                                             <object class="GtkFileChooserButton" id="folderDownload">
                                                 <property name="action">select-folder</property>
+                                                <property name="has_tooltip">True</property>
                                                 <property name="title" translatable="yes">Select A Folder</property>
+                                                <property name="tooltip_markup" translatable="yes">Download location</property>
+                                                <property name="tooltip_text" translatable="yes">Download location</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -408,6 +445,9 @@
                                         </child>
                                         <child>
                                             <object class="GtkComboBox" id="cboFormat">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="tooltip_markup" translatable="yes">Choose a video format - mp4 360p is available for most videos (recommended)</property>
+                                                <property name="tooltip_text" translatable="yes">Choose a video format - mp4 360p is available for most videos (recommended)</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -441,7 +481,10 @@
                                                 <property name="visible">True</property>
                                                 <child>
                                                     <object class="GtkEntry" id="txtProxy">
+                                                        <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
+                                                        <property name="tooltip_markup" translatable="yes">Proxy Server details. Leave blank if none. Save and application restart required for setting to take effect</property>
+                                                        <property name="tooltip_text" translatable="yes">Proxy Server details. Leave blank if none. Save and application restart required for setting to take effect</property>
                                                         <property name="visible">True</property>
                                                     </object>
                                                 </child>
@@ -483,6 +526,9 @@
                                         </child>
                                         <child>
                                             <object class="GtkEntry" id="txtProxyUser">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="tooltip_markup" translatable="yes">Username for proxy. Leave blank if none</property>
+                                                <property name="tooltip_text" translatable="yes">Username for proxy. Leave blank if none</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -511,6 +557,9 @@
                                         </child>
                                         <child>
                                             <object class="GtkEntry" id="txtProxyPass">
+                                                <property name="has_tooltip">True</property>
+                                                <property name="tooltip_markup" translatable="yes">Password for proxy. Leave blank if none</property>
+                                                <property name="tooltip_text" translatable="yes">Password for proxy. Leave blank if none</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
@@ -544,7 +593,10 @@
                                         <property name="visible">True</property>
                                         <child>
                                             <object class="GtkButton" id="btnSave">
+                                                <property name="has_tooltip">True</property>
                                                 <property name="label" translatable="yes">Save</property>
+                                                <property name="tooltip_markup" translatable="yes">Hit Save if you want to make the changes permanent, else they will be lost on application close</property>
+                                                <property name="tooltip_text" translatable="yes">Hit Save if you want to make the changes permanent, else they will be lost on application close</property>
                                                 <property name="visible">True</property>
                                                 <signal handler="btnSave_clicked" name="clicked"/>
                                             </object>
