@@ -32,6 +32,7 @@ class youtubedl_gui:
             "btnSave_clicked"   : self.save_preference,
             "btnDelete_clicked" : self.delete,
             "btnReload_clicked" : self.reload,
+            "btnPause_clicked"  : self.pause,
             "btnClear_clicked"  : self.clear,
             "btnUp_clicked"     : self.promote,
             "btnDown_clicked"   : self.demote,
@@ -244,7 +245,14 @@ class youtubedl_gui:
             if url_model[url][0]!="Processing":
                 url_model[url][0] = "Queued"
         self.saveurllist()
-    
+        
+    def pause(self,widget):
+        url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()
+        for url in url_selected:
+            if url_model[url][0]=="Queued":
+                url_model[url][0] = "Paused"
+        self.saveurllist()
+        
     def delete(self,widget):
         # Delete selected items from listurl
         url_model, url_selected = self.builder.get_object("listUrl").get_selection().get_selected_rows()

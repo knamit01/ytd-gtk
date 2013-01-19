@@ -175,8 +175,8 @@
                                                     <object class="GtkButton" id="btnReload">
                                                         <property name="has_tooltip">True</property>
                                                         <property name="is_focus">True</property>
-                                                        <property name="tooltip_markup" translatable="yes">Re-queue selected downloads after an Error or User Abort</property>
-                                                        <property name="tooltip_text" translatable="yes">Re-queue selected downloads after an Error or User Abort</property>
+                                                        <property name="tooltip_markup" translatable="yes">Re-queue selected downloads after an Error or Pause</property>
+                                                        <property name="tooltip_text" translatable="yes">Re-queue selected downloads after an Error or Pause</property>
                                                         <property name="visible">True</property>
                                                         <signal handler="btnReload_clicked" name="clicked"/>
                                                         <child>
@@ -189,6 +189,27 @@
                                                     <packing>
                                                         <property name="expand">False</property>
                                                         <property name="fill">False</property>
+                                                    </packing>
+                                                </child>
+                                                <child>
+                                                    <object class="GtkButton" id="btnPause">
+                                                        <property name="has_tooltip">True</property>
+                                                        <property name="is_focus">True</property>
+                                                        <property name="tooltip_markup" translatable="yes">Pause selected downloads - re-queue to download them later</property>
+                                                        <property name="tooltip_text" translatable="yes">Pause selected downloads - re-queue to download them later</property>
+                                                        <property name="visible">True</property>
+                                                        <signal handler="btnPause_clicked" name="clicked"/>
+                                                        <child>
+                                                            <object class="GtkImage" id="image3">
+                                                                <property name="stock">gtk-media-pause</property>
+                                                                <property name="visible">True</property>
+                                                            </object>
+                                                        </child>
+                                                    </object>
+                                                    <packing>
+                                                        <property name="expand">False</property>
+                                                        <property name="fill">False</property>
+                                                        <property name="position">1</property>
                                                     </packing>
                                                 </child>
                                                 <child>
@@ -209,7 +230,7 @@
                                                     <packing>
                                                         <property name="expand">False</property>
                                                         <property name="fill">False</property>
-                                                        <property name="position">1</property>
+                                                        <property name="position">2</property>
                                                     </packing>
                                                 </child>
                                                 <child>
@@ -228,9 +249,8 @@
                                                         </child>
                                                     </object>
                                                     <packing>
-                                                        <property name="expand">False</property>
                                                         <property name="fill">False</property>
-                                                        <property name="position">2</property>
+                                                        <property name="position">3</property>
                                                     </packing>
                                                 </child>
                                                 <child>
@@ -249,8 +269,7 @@
                                                         </child>
                                                     </object>
                                                     <packing>
-                                                        <property name="fill">False</property>
-                                                        <property name="position">3</property>
+                                                        <property name="position">4</property>
                                                     </packing>
                                                 </child>
                                                 <child>
@@ -269,7 +288,7 @@
                                                         </child>
                                                     </object>
                                                     <packing>
-                                                        <property name="position">4</property>
+                                                        <property name="position">5</property>
                                                     </packing>
                                                 </child>
                                                 <child>
@@ -288,7 +307,7 @@
                                                         </child>
                                                     </object>
                                                     <packing>
-                                                        <property name="position">5</property>
+                                                        <property name="position">6</property>
                                                     </packing>
                                                 </child>
                                             </object>
