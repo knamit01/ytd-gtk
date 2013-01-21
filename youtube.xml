@@ -579,6 +579,7 @@
                                                 <property name="has_tooltip">True</property>
                                                 <property name="tooltip_markup" translatable="yes">Password for proxy. Leave blank if none</property>
                                                 <property name="tooltip_text" translatable="yes">Password for proxy. Leave blank if none</property>
+                                                <property name="visibility">False</property>
                                                 <property name="visible">True</property>
                                             </object>
                                             <packing>
