@@ -183,7 +183,7 @@ class youtubedl_gui:
         
         # start download
         if self.current_url :
-            utube_cmd.append(self.current_url[1]) # get url from current_url
+            utube_cmd.append((self.current_url[1].split('&'))[0]) # get url from current_url
             self.file_stdout = open(gettempdir()+'/utube.txt', 'w')
             self.proc = Popen(utube_cmd,  stdout=self.file_stdout, stderr=STDOUT, cwd=location)
             self.file_stdin = open(gettempdir()+'/utube.txt', 'r')
@@ -198,7 +198,7 @@ class youtubedl_gui:
     def download_status(self):
         # extracts the messages from the youtube-dl execution and shows on the status bar
         msg = self.file_stdin.readline().strip()
-        
+
         if msg != "":
             #check if msg contains "ERROR"
             if msg.count("ERROR"):
@@ -220,7 +220,7 @@ class youtubedl_gui:
                     if dl_percent_complete >= 100.0 and self.proc.poll()!=None:
                         self.reset_ui("Done","Download complete "+self.current_filename)
                         self.download(None)
-                elif dl_status[-1]=="downloaded":
+                elif dl_status[-1]=="downloaded" and self.proc.poll()!=None:
                     self.reset_ui("Done","Download complete "+self.current_filename)
                     self.download(None)
                 elif self.current_filename=='' and dl_status[-2]=="Destination:":
@@ -233,6 +233,10 @@ class youtubedl_gui:
                 msg = msg[len(msg)-1]
                 self.builder.get_object("statusbar").push(self.context_id,msg)
 
+        elif self.proc.poll() != None:
+            self.reset_ui("Queued", 'Unexpected Termination')
+            self.download(None)
+            
         return True # return is true to continue polling for output of youtube-dl
     
     def cancel_download(self, widget):
