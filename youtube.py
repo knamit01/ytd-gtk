@@ -183,14 +183,15 @@ class youtubedl_gui:
 
         # start download
         if self.current_url :
-            download_url = self.current_url[1]
+            download_url = self.current_url[1] # get url from current_url
+            
             # check if both v= and list= parameters are in the get request
-            # if true remove list else the complete list will be downloaded
+            # if true add option --no-playlist to the command array
             if download_url.count("v=") and download_url.count("list="):
-                x = [i for i in download_url.split('&') if not 'list=' in  i]
-                download_url = '&'.join(x)
+                utube_cmd.append("--no-playlist")
 
-            utube_cmd.append(download_url) # get url from current_url
+            utube_cmd.append(download_url) 
+            print utube_cmd #print parameters for inspection
             self.file_stdout = open(gettempdir()+'/utube.txt', 'w')
             self.proc = Popen(utube_cmd,  stdout=self.file_stdout, stderr=STDOUT, cwd=location)
             self.file_stdin = open(gettempdir()+'/utube.txt', 'r')
