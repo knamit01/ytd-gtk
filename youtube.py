@@ -373,8 +373,11 @@ class youtubedl_gui:
             self.mini=True
 
     def wsevt(self,widget,event):
-        if event.type == gtk.gdk.DELETE:
+        # close to taskbar icon on window close or minimise event
+        if event.type == gtk.gdk.DELETE or \
+        (event.type == gtk.gdk.WINDOW_STATE and event.changed_mask == gtk.gdk.WINDOW_STATE_ICONIFIED and event.new_window_state == gtk.gdk.WINDOW_STATE_ICONIFIED):
             self.winmain.hide_all()
+            self.winmain.deiconify() 
             self.mini=True
             return True
 
